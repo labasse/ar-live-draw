@@ -19,8 +19,6 @@
 <body style='margin : 0px; font-family: Monospace;'>
     <div id='container'></div>
     <script>
-        // Simplified : https://github.com/stemkoski/AR-Examples/blob/master/smoothed-controls.html
-
         const WIDTH = 640;
         const HEIGHT = 480;
         
@@ -84,12 +82,44 @@
         });
         smoothedRoot.add(cube);
         
+        var points=[
+            [ [  1,  1 ], [  1,  0 ], [ 2, 1 ] ], // 01 00 11
+            [ [  1,  0 ], [  2,  0 ], [ 2, 1 ] ], // 00 10 11 
+            [ [ -1,  1 ], [ -1,  0 ], [ 0, 1 ] ],  
+            [ [ -1,  0 ], [  0,  0 ], [ 0, 1 ] ],
+            [ [  2,  1 ], [  2,  0 ], [ 3, 1 ] ], 
+            [ [  2,  0 ], [  3,  0 ], [ 3, 1 ] ], 
+            [ [  0,  0 ], [  0, -1 ], [ 1, 0 ] ],
+            [ [  0, -1 ], [  1, -1 ], [ 1, 0 ] ],
+            [ [  0,  2 ], [  0,  1 ], [ 1, 2 ] ],
+            [ [  0,  1 ], [  1,  1 ], [ 1, 2 ] ],
+            [ [  0,  0 ], [  0, -1 ], [ 1, 0 ] ],
+            [ [  0, -1 ], [  1, -1 ], [ 1, 0 ] ],
+        ];
         animate();
         function animate() {
             requestAnimationFrame(animate);
             if (arToolkitSource.ready !== false)
                 arToolkitContext.update(arToolkitSource.domElement);
             smoothedControls.update(markerRoot);
+            if( cube.visible ) {
+                for(var i = 0; i<points.length; i++) {
+                    for(var j = 0; j<points[i].length; j++) {
+                        var vector = new THREE.Vector3(
+                            points[i][j][0]-.5, 
+                            -cube.position.y, 
+                            points[i][j][1]-.5
+                        );
+                        cube.localToWorld(vector);
+                        vector.project(camera );
+                        cube.geometry.faceVertexUvs[0][i][j].set(
+                            ( vector.x + 1 ) * .5, 
+                            ( vector.y + 1 ) * .5
+                        );
+                    }
+                }
+                cube.geometry.uvsNeedUpdate = true;
+            }
             renderer.render(scene, camera);
         }
     </script>
