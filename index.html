@@ -62,12 +62,13 @@
             patternUrl: "data/hiro.patt",
         });
         
+        var texture = new THREE.VideoTexture(arToolkitSource.domElement);
+        texture.minFilter = THREE.LinearFilter;
         var cube = new THREE.Mesh(
             new THREE.CubeGeometry(1, 1, 1), 
-            new THREE.MeshNormalMaterial({
-                transparent : true,
-                opacity: 0.5,
-                side: THREE.DoubleSide
+            new THREE.MeshBasicMaterial({
+                map: texture,
+                side: THREE.FrontSide
             })
         );        
         cube.position.y = 0.5;
