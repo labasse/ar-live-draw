@@ -20,7 +20,6 @@
 
 <body style='margin : 0px; font-family: Monospace;'>
     <div id='container'></div>
-    <p>Print <a href='data/template.pdf'>this page</a>, colorate and <a href='webcam.html'>try with you're webcam</a> !</p>
     <script>
         const WIDTH = 640;
         const HEIGHT = 480;
@@ -38,9 +37,7 @@
         document.getElementById('container').appendChild(renderer.domElement);
 
         var liveDraw = new ArLiveDraw(scene, camera, {
-            sourceType: 'video',
-            sourceUrl: 'data/hiro4.mp4',
-    
+            sourceType: 'webcam',
             cameraParametersUrl: 'data/camera_para.dat',
             detectionMode: 'mono',
             patternRatio: .5,
